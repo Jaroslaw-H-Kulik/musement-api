@@ -1,0 +1,126 @@
+{
+  "/cities/{cityId}/weather": {
+    "post": {
+      "tags": [
+        "city",
+        "weather"
+      ],
+      "summary": "Add a weather forecast to the city for given date - defaults to today's date.",
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/date"
+        }
+      ],
+      "requestBody": {
+        "description": "Weather forecast's data",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/postWeatherForecast"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Returned when successful",
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/weatherForecast"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Returned when sent data contain errors"
+        },
+        "404": {
+          "description": "Returned when resource is not found"
+        },
+        "409": {
+          "description": "Returned when the weather forecast for the city was already set"
+        },
+        "503": {
+          "description": "Returned when the service is unavailable"
+        }
+      }
+    },
+    "get": {
+      "tags": [
+        "city",
+        "weather"
+      ],
+      "summary": "Get a weather forecast to the city for given date - defaults to today's date.",
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/date"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Returned when successful",
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/weatherForecast"
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "No resource found"
+        },
+        "503": {
+          "description": "Service unavailable"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "weatherForecast": {
+        "properties": {
+          "city": {
+            "$ref": "#/components/schemas/City"
+          },
+          "date": {
+            "description": "Date | Use format: YYYY-MM-DD",
+            "type": "string"
+          },
+          "condition": {
+            "description": "Description of weather conditions",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "postWeatherForecast": {
+        "properties": {
+          "condition": {
+            "description": "Description of weather conditions",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "parameters": {
+      "date": {
+        "name": "date",
+        "in": "query",
+        "description": "Date | Use format: YYYY-MM-DD",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}
